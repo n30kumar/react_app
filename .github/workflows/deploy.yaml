@@ -1,4 +1,5 @@
-name:CI/CD for react app
+name: CI/CD for react app
+
 on:
   push:
     branches:
@@ -6,29 +7,36 @@ on:
   pull_request:
     branches:
       - main
+
 permissions:
   contents: write
   pages: write
+
 jobs:
   build:
-    //my pc is window 
+    # this runs on a Windows environment
     runs-on: windows-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+
       - name: Install dependencies
         run: npm install
+
       - name: Run tests
-        run: npm test
+        run: npm test -- --watchAll=false
+
       - name: Build application
         run: npm run build
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build  
-    
+          publish_dir: ./build
